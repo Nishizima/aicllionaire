@@ -1,0 +1,162 @@
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    width: 100%;
+    height: 100vh;
+    background: url(./img\ 1.png) no-repeat center;
+    background-size: cover;
+
+    font-family: "noto sans jp";
+
+    overflow: hidden;
+
+
+    &::before {
+        content: "";
+        background-color: rgba(0, 0, 0, .50);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        inset: -1px;
+
+        transition: .3s all linear;
+    }
+
+
+}
+
+.body_darker {
+    &::before {
+        content: "";
+        background-color: rgba(0, 0, 0, .90);
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        inset: -1px;
+    }
+}
+
+.mv {
+    width: 100%;
+    height: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: .3s all linear;
+
+    >img {
+        height: 70%;
+        object-fit: contain;
+        transition: .3s all linear;
+
+    }
+}
+
+.mv_little {
+    height: 35vh;
+
+    >img {
+        height: 80%;
+        object-fit: contain;
+    }
+}
+
+.step {
+    width: 100%;
+    height: 65vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    position: absolute;
+    z-index: 1;
+    bottom: 0;
+
+    padding: 0px 80px;
+
+    opacity: 0;
+
+    pointer-events: none;
+
+
+
+}
+
+.step_selected {
+    pointer-events: all;
+}
+
+.question {
+    width: 100%;
+    height: 40%;
+    border: 3px solid white;
+    border-radius: 16px;
+    padding: 0 2rem;
+
+    opacity: 0;
+}
+
+.question-text {
+    color: white;
+    font-size: 3rem;
+
+    &::before {
+        content: attr(data-number);
+        margin-right: 16px;
+    }
+}
+
+.answer {
+    list-style: none;
+    width: 100%;
+    height: 100%;
+    border: 3px solid white;
+    border-radius: 16px;
+    color: white;
+    font-size: 2rem;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 16px;
+
+    cursor: pointer;
+
+    transition: .3s all linear;
+
+    opacity: 0;
+
+
+
+
+    &::before {
+        content: attr(data-letter);
+        margin-right: 16px;
+    }
+
+    &:hover {
+        background-color: rgba(255, 102, 0, .75);
+    }
+}
+
+.answer-box {
+    padding: 0;
+    width: 100%;
+    /* display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 40px; */
+
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-rows: repeat(2, minmax(0, 1fr));
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+
+}
