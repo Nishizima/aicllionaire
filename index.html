@@ -15,8 +15,9 @@
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
+    <div class="audioButton"></div>
     <section class="mv">
-      <img src="logo.png" alt="who wants to be a millionaire" id="main-logo" />
+      <img src="logo.webp" alt="who wants to be a millionaire" id="main-logo" />
     </section>
 
     <section class="step">
@@ -42,19 +43,22 @@
       </div>
 
       <ul class="answer-box">
-        <li class="answer" onclick="nextQuestion()" data-letter="A.">
-          resposta
-        </li>
-        <li class="answer" onclick="nextQuestion()" data-letter="B.">
-          resposta
-        </li>
-        <li class="answer" onclick="nextQuestion()" data-letter="C.">
-          resposta
-        </li>
-        <li class="answer" onclick="nextQuestion()" data-letter="D.">
-          resposta
-        </li>
+        <li class="answer" data-letter="A.">resposta</li>
+        <li class="answer" data-letter="B.">resposta</li>
+        <li class="answer" data-letter="C.">resposta</li>
+        <li class="answer" data-letter="D.">resposta</li>
       </ul>
+    </section>
+
+    <section class="cong">
+      <p class="cong-text">Congratulations</p>
+      <p class="cong-million">1.000.000.000</p>
+
+      <div class="fogos"></div>
+      <div class="fogos"></div>
+      <div class="fogos"></div>
+      <div class="fogos"></div>
+      <div class="fogos"></div>
     </section>
   </body>
 
@@ -65,6 +69,18 @@
     crossorigin="anonymous"
   ></script>
   <script>
+    var themeAudio = new Audio("main-theme.mp3");
+    themeAudio.loop = true;
+    var correctAudio = new Audio("correct.mp3");
+    var questionAudio = new Audio("question.mp3");
+
+    $(document).ready(function () {});
+
+    $(".audioButton").click(function () {
+      themeAudio.play();
+      $(this).hide();
+    });
+
     TweenMax.to("#main-logo", 1.5, {
       scale: 1.1,
       repeat: -1,
@@ -116,13 +132,55 @@
       $("body").addClass("body_darker");
 
       timelines[nquestion].play();
+
+      themeAudio.pause();
+      questionAudio.play().then(function () {
+        setTimeout(() => {
+          questionAudio.pause();
+          questionAudio.currentTime = 0;
+        }, 5000);
+      });
     });
 
     $(".answer").click(function () {
-      $(".step").removeClass("step_selected");
-      gsap.to(questions[nquestion++], { opacity: 0, duration: 1 });
+      $(".answer").removeClass("answer_selected");
+      $(".answer").off("click.selected");
+      $(this).addClass("answer_selected");
 
-      timelines[nquestion].play();
+      $(".answer_selected").on("click.selected", function () {
+        $(".answer").removeClass("answer_correct");
+        $(".answer").off("click.answerCorrect");
+        $(this).addClass("answer_correct");
+
+        correctAudio.play().then(function () {
+          setTimeout(() => {
+            correctAudio.pause();
+            correctAudio.currentTime = 0;
+          }, 5000);
+        });
+
+        $(".answer_correct").on("click.answerCorrect", function () {
+          $(".step").removeClass("step_selected");
+          gsap.to(questions[nquestion++], { opacity: 0, duration: 1 });
+
+          if (nquestion < questions.length) {
+            timelines[nquestion].play();
+
+            questionAudio.play().then(function () {
+              setTimeout(() => {
+                questionAudio.pause();
+                questionAudio.currentTime = 0;
+              }, 5000);
+            });
+          } else {
+            gsap.to($(".mv"), { opacity: 0, duration: 1 });
+            gsap.to($(".cong"), { opacity: 1, duration: 1, delay: 2 });
+
+            themeAudio.currentTime = 0;
+            themeAudio.play();
+          }
+        });
+      });
     });
   </script>
 </html>
